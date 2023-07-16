@@ -1,3 +1,3 @@
 # CloudEdgeAssetsOptimizer
 
-Demo will be on Monday
+Demo and description in AnalyticalModel
