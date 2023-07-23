@@ -22,3 +22,6 @@ and manufacturing systems.
 Author: Paulius Tervydis
  
 Date: 2023-07-23
+
+-------
+
