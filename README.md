@@ -20,6 +20,8 @@ across diverse domains,including telecommunication networks, transportation
 and manufacturing systems.
 
 Author: Paulius Tervydis
+
+Email: [paulius.tervydis@ktu.lt](mailto:paulius.tervydis@ktu.lt)
  
 Date: 2023-07-23
 
