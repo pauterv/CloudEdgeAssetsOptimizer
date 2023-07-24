@@ -26,7 +26,7 @@
 #
 # =============================================================================
 
-import gui_frontend
+import gui
 
 if __name__ == "__main__":
-    gui_frontend.root.mainloop()
+    gui.root.mainloop()
