@@ -25,3 +25,5 @@ Date: 2023-07-23
 
 -------
 
+![CloudEdgeAssetsOptimizer GUI](https://github.com/pauterv/CloudEdgeAssetsOptimizer/blob/main/pics/Fig2.png?raw=true)
+
