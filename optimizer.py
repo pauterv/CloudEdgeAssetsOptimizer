@@ -52,8 +52,8 @@ def find_optimal_configuration(parameters):
         N_C_nozeros = np.where(N_C != 0, N_C, np.nan)
 
         rho_E = Lambda_E/(N_E_nozeros*mu_E)
-        rho_C = Lambda_C/(N_C_nozeros*mu_C)
-        # rho_C = np.where(rho_C==np.nan,0,rho_C)
+        rho_C = Lambda_C/(N_C_nozeros*mu_C) 
+        rho_C = np.nan_to_num(rho_C, nan=0)
 
         if C_C_pricing == "Dedicated":
             C_S = N_E*C_E + N_C*C_C
