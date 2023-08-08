@@ -37,12 +37,16 @@ def calc_system_performance(parameters):
         return "Wrong Lambda, P_E or N_E parameters!\n\n"\
                 f"Possible solutions:\n"\
                 "   N_E must be > 0 if Lambda*P_E > 0\n"
+    elif N_E == 0:
+        lambda_E = 0
     else:
         lambda_E = Lambda*P_E/N_E
     if Lambda*P_C > 0 and N_C <= 0:
         return "Wrong Lambda, P_E or N_C parameters!\n\n"\
                 f"Possible solutions:\n"\
                 "   N_C must be > 0 if Lambda*(1-P_E) > 0\n"
+    elif N_C == 0:
+        lambda_C = 0
     else:
         lambda_C = Lambda*P_C/N_C
     
@@ -113,6 +117,9 @@ def calc_system_performance(parameters):
         P_Ca=np.where(Lambda_C > lambda_Ccr,1-((Lambda_C-lambda_Ccr)/Lambda_C),1)
     else:
         P_Ca = 0
+
+    if lambda_Ecr < 0: lambda_Ecr = 0 
+    if lambda_Ccr < 0: lambda_Ccr = 0 
 
     if C_C_pricing == "Dedicated":
         C_S = N_E*C_E + N_C*C_C

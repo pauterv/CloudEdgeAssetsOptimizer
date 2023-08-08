@@ -244,16 +244,18 @@ def msqs(ar, sn, qs=None, sr1=None, s1=None, vs=None):
     if (sr1 is None) and (s1 is not None):
         sr1 = 1/s1
 
-    if type(sn) != int or sn < 1:
-        raise Exception("Wrong parameter: sn must be integer >= 1")
+    # if type(sn) != int or sn < 1:
+    #     raise Exception("Wrong parameter: sn must be integer >= 1")
 
     if ar > sn*sr1:
         raise Exception("Unstable system: ar must be < sn*sr1")
     
     if qs_f[0] == "G" or qs_f[2]!="1":
         raise Exception('Wrong system type: only "MM1", "MD1", "MG1","DM1","DD1","DG1" are valid')
-
-    result = ssqs(qs=qs_f, ar=ar/sn, sr=sr1, s=s1, vs=vs)
+    if sn > 1:
+        result = ssqs(qs=qs_f, ar=ar/sn, sr=sr1, s=s1, vs=vs)
+    else:
+        result = ssqs(qs=qs_f, ar=0, sr=sr1, s=s1, vs=vs)
     result["ar"] = ar
     result['sn'] = sn
     return result

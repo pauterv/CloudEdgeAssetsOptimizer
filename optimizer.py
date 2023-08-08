@@ -48,8 +48,12 @@ def find_optimal_configuration(parameters):
         else:
             P_Ca = 0
 
-        rho_E = Lambda_E/(N_E*mu_E)
-        rho_C = Lambda_C/(N_C*mu_C)
+        N_E_nozeros = np.where(N_E != 0, N_E, np.nan)
+        N_C_nozeros = np.where(N_C != 0, N_C, np.nan)
+
+        rho_E = Lambda_E/(N_E_nozeros*mu_E)
+        rho_C = Lambda_C/(N_C_nozeros*mu_C)
+
         if C_C_pricing == "Dedicated":
             C_S = N_E*C_E + N_C*C_C
         if C_C_pricing == "On-demand":
@@ -75,7 +79,7 @@ def find_optimal_configuration(parameters):
     N_E_bat_cr = np.ceil((Lambda_E*T_bat_cr)/B_p) 
 
     N_E = np.arange(N_E_bat_cr,N_Emax*2+1,1)
-    N_C = np.arange(2,N_Cmax*2+1,1)
+    N_C = np.arange(0,N_Cmax*2+1,1)
     NN_E, NN_C = np.meshgrid(N_E, N_C)
     PP_S,RR_S,CC_S = model(NN_E, NN_C)
 
