@@ -53,6 +53,7 @@ def find_optimal_configuration(parameters):
 
         rho_E = Lambda_E/(N_E_nozeros*mu_E)
         rho_C = Lambda_C/(N_C_nozeros*mu_C)
+        rho_C = np.where(rho_C==np.nan,0,rho_C)
 
         if C_C_pricing == "Dedicated":
             C_S = N_E*C_E + N_C*C_C
@@ -82,6 +83,8 @@ def find_optimal_configuration(parameters):
     N_C = np.arange(0,N_Cmax*2+1,1)
     NN_E, NN_C = np.meshgrid(N_E, N_C)
     PP_S,RR_S,CC_S = model(NN_E, NN_C)
+
+    PP_S = np.nan_to_num(PP_S, nan=0)
 
     # Find the global maximum revenue value
     PP_S_max = np.max(PP_S) # global max profit
