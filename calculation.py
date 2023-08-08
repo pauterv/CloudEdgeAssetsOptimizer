@@ -173,12 +173,12 @@ def calc_system_performance(parameters):
         E_system_params['Working time on battery [h]'] = T_E_bat
     except:
         E_system_params['Working time on battery [h]'] = None
-    E_system_params['System Cost [Eur/h]'] = C_S_E
-    C_system_params['System Cost [Eur/h]'] = C_S_C
+    E_system_params['System cost [Eur/h]'] = C_S_E
+    C_system_params['System cost [Eur/h]'] = C_S_C
     E_system_params['System revenue [Eur/h]'] = R_S_E
     C_system_params['System revenue [Eur/h]'] = R_S_C
-    E_system_params['System Profit [Eur/h]'] = P_S_E
-    C_system_params['System Profit [Eur/h]'] = P_S_C
+    E_system_params['System profit [Eur/h]'] = P_S_E
+    C_system_params['System profit [Eur/h]'] = P_S_C
 
     return {"Edge_System_params":E_system_params, "Cloud_System_params":C_system_params}
 
