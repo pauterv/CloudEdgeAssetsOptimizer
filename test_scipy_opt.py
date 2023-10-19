@@ -1,10 +1,11 @@
 import numpy as np
-from scipy.optimize import minimize, brute, dual_annealing, fmin_tnc
+from scipy.optimize import minimize
 from qsystems import *
+import time
 
 Lambda = 1000     
 r_p = 0.05        
-P_E = 0.4         
+P_E = 0.3         
 N_E = 10         
 T_E = 200/3600        
 T_E_distr = 'Determined'   
@@ -68,6 +69,8 @@ def edge_battery_function(PE, NE):
 def waiting_time_function(PE, NE, NC):
     W_E = 1e6#np.inf 
     W_C = 1e6#np.inf 
+    W_E = np.inf 
+    W_C = np.inf 
     PC = 1 - PE
     if Lambda*PE/NE < mu_E and PE >= 0 and NE >= 0:
         E_params = msqs(ar = Lambda*PE, sn = NE, s1 = T_E, qs=qs_E)
@@ -77,8 +80,7 @@ def waiting_time_function(PE, NE, NC):
         C_params = msqs(ar = Lambda*PC, sn = NC, s1 = T_C, qs=qs_C)
         if C_params['w'] <= W_cr:
             W_C = C_params['w'] 
-    print(W_E*3600,W_C*3600)
-    # if W_E < W_cr and W_C < W_cr:  # Example waiting time function
+
     return W_E + W_C
     # else:
         # return 1e6
@@ -88,36 +90,49 @@ def combined_objective(x):
     
     PE = x[0]
     NE, NC = np.round(x[1:]).astype(int) 
-    # print(NE,NC)
-    
-    # NE = int(NE)
-    # NC = int(NC)
     return cost_function(PE, NE, NC)+ waiting_time_function(PE, NE, NC)+ edge_battery_function(PE, NE)+(NE+NC)
 
 # Initial guesses for PE, NE, NC
-initial_guess = [0.5, 50, 50]  # Example initial guesses
+initial_guess = [P_E, 50, 50]  # Example initial guesses
 
 # Define bounds for PE (between 0 and 1) and NE, NC (integer values)
 bounds = [(P_E, P_E), (1, 10000), (1, 10000)]
 
 # Perform the optimization
-#result = minimize(combined_objective, initial_guess, bounds=bounds, method='SLSQP')#BFGS
+ts = time.time()
 result = minimize(combined_objective, initial_guess, bounds=bounds, method='Powell',options={'disp': True})
-#result = brute(combined_objective, ranges=bounds, disp= True, finish=None)
-#result = fmin_tnc(combined_objective,initial_guess, bounds=bounds)
-# Extract the optimal values of PE, NE, NC
-#optimal_PE, optimal_NE, optimal_NC = result.x
+print("time = ",time.time()-ts)
 optimal_PE = result.x[0]
 optimal_NE, optimal_NC = np.round(result.x[1:]).astype(int)
-#optimal_PE = result[0]
-#optimal_NE, optimal_NC = np.round(result[1:]).astype(int)
 
 # Calculate the corresponding cost and waiting time
 optimal_cost = cost_function(optimal_PE, optimal_NE, optimal_NC)
 optimal_waiting_time = waiting_time_function(optimal_PE, optimal_NE, optimal_NC)
 
-print(f"Optimal PE: {optimal_PE}")
+# print(f"Optimal PE: {optimal_PE}")
 print(f"Optimal NE: {optimal_NE}")
 print(f"Optimal NC: {optimal_NC}")
-print(f"Optimal Cost: {optimal_cost}")
-print(f"Optimal Waiting Time: {optimal_waiting_time}")
+
+from optimizer import *
+parameters = {}
+parameters['lambda'] = Lambda
+parameters['r_p'] = r_p
+parameters['P_E'] = P_E
+parameters['N_E'] = N_E
+parameters['T_E'] = T_E
+parameters['T_E_distr'] = T_E_distr
+parameters['B_p'] = B_p
+parameters['C_E'] = C_E
+parameters['N_C'] = N_C
+parameters['T_C'] = T_C
+parameters['T_C_distr'] = T_C_distr
+parameters['C_C'] = C_C
+parameters['C_C_pricing'] = C_C_pricing
+parameters['W_cr'] = W_cr
+parameters['T_bat_cr'] = T_bat_cr
+ts = time.time()
+optimized_parameters = find_optimal_configuration(parameters)
+print("time = ",time.time()-ts)
+# print(optimized_parameters)
+print(f"Optimal NE: {optimized_parameters['N_E_opt']}")
+print(f"Optimal NC: {optimized_parameters['N_C_opt']}")
