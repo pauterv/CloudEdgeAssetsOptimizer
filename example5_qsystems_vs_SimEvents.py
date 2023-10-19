@@ -84,7 +84,7 @@ plt.axhline(W_cr_s,color='black',linestyle=':')
 plt.stem(lambda_cr_md1,W_cr_s,'g:',label="$\lambda_{cr}=%d$, mean($T_C$) = 100 s, std($T_C$)= 0 s"%lambda_cr_md1) 
 plt.stem(lambda_cr_mg1,W_cr_s,'b:',label="$\lambda_{cr}=%d$, mean($T_C$) = 100 s, std($T_C$)= 50 s"%lambda_cr_mg1)
 plt.stem([lambda_cr_mm1],[W_cr_s],'r:',label="$\lambda_{cr}=%d$, mean($T_C$) = 100 s, std($T_C$)= 100 s"%lambda_cr_mm1)
-plt.text(0,W_cr_s+10,"$W_{Ccr} = %d$ s"%W_cr_s)
+plt.text(140,W_cr_s+10,"$W_{Ccr} = %d$ s"%W_cr_s)
 
 plt.xlim([140,320])
 plt.ylim([0,800])
