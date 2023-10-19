@@ -1,8 +1,21 @@
+#
+#   Example 6: Finding optimum number of Edge and Cloud devices
+#   (optimization model comparison)
+#	
+#	Results and execution time of the developed optimization.py 
+#   model are compared to the scipy.optimize results 
+#   
+#   Author: Paulius Tervydis
+#   Date: 2023-10-19
+# 
+# ==============================================================
+
 import numpy as np
 from scipy.optimize import minimize
 from qsystems import *
 import time
 
+# Initial parameters and requirements
 Lambda = 1000     
 r_p = 0.05        
 P_E = 0.3         
@@ -32,6 +45,9 @@ mu_C = 1/T_C
 mu_E = 1/T_E
 # P_C = 1 - P_E
 
+#--------------------------------------------------------------
+# Model for scipy.optimize
+# -------------------------------------------------------------
 # Define the cost function and waiting time function
 def cost_function(PE, NE, NC):
     Lambda_E = PE * Lambda
@@ -55,20 +71,21 @@ def cost_function(PE, NE, NC):
     P_S_E = R_S_E - C_S_E
     P_S_C = R_S_C - C_S_C
 
-    return 1e6-(P_S_E+P_S_C)  # Example cost function
-    #return C_S_E+C_S_C  # Example cost function
+    # return 1e6-(P_S_E+P_S_C)  
+    return C_S_E+C_S_C  # Example cost function
 
 def edge_battery_function(PE, NE):
     Lambda_E = PE * Lambda
     N_E_bat_cr = np.ceil((Lambda_E*T_bat_cr)/B_p)
     if NE < N_E_bat_cr:
-        return 1e6#np.inf
+        # return 1e6#np.inf
+        return np.inf
     else:
         return 0
 
 def waiting_time_function(PE, NE, NC):
-    W_E = 1e6#np.inf 
-    W_C = 1e6#np.inf 
+    # W_E = 1e6#np.inf 
+    # W_C = 1e6#np.inf 
     W_E = np.inf 
     W_C = np.inf 
     PC = 1 - PE
@@ -96,12 +113,16 @@ def combined_objective(x):
 initial_guess = [P_E, 50, 50]  # Example initial guesses
 
 # Define bounds for PE (between 0 and 1) and NE, NC (integer values)
-bounds = [(P_E, P_E), (1, 10000), (1, 10000)]
+bounds = [(P_E, P_E), (1, 1000), (1, 1000)]
 
 # Perform the optimization
-ts = time.time()
+tstart = time.time()
 result = minimize(combined_objective, initial_guess, bounds=bounds, method='Powell',options={'disp': True})
-print("time = ",time.time()-ts)
+tfinish= time.time()
+print(60*"-")
+print("Results of scipy.optimize:")
+t_scipy_optimize = tfinish-tstart
+print("Execution time = ",t_scipy_optimize,"seconds")
 optimal_PE = result.x[0]
 optimal_NE, optimal_NC = np.round(result.x[1:]).astype(int)
 
@@ -113,6 +134,9 @@ optimal_waiting_time = waiting_time_function(optimal_PE, optimal_NE, optimal_NC)
 print(f"Optimal NE: {optimal_NE}")
 print(f"Optimal NC: {optimal_NC}")
 
+#--------------------------------------------------------------
+# Usage of the developed optimizer.py model
+# -------------------------------------------------------------
 from optimizer import *
 parameters = {}
 parameters['lambda'] = Lambda
@@ -130,9 +154,15 @@ parameters['C_C'] = C_C
 parameters['C_C_pricing'] = C_C_pricing
 parameters['W_cr'] = W_cr
 parameters['T_bat_cr'] = T_bat_cr
-ts = time.time()
+tstart = time.time()
 optimized_parameters = find_optimal_configuration(parameters)
-print("time = ",time.time()-ts)
+tfinish= time.time()
+t_optimizer = tfinish-tstart
+print(60*"-")
+print("Results of optimizer.py model:")
+print("Execution time = ",t_optimizer,"seconds")
 # print(optimized_parameters)
-print(f"Optimal NE: {optimized_parameters['N_E_opt']}")
-print(f"Optimal NC: {optimized_parameters['N_C_opt']}")
+print(f"Optimal NE: {int(optimized_parameters['N_E_opt'])}")
+print(f"Optimal NC: {int(optimized_parameters['N_C_opt'])}")
+print(60*"=")
+print("optimizer.py is %.2f times faster"%(t_scipy_optimize/t_optimizer))      

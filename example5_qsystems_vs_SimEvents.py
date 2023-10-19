@@ -1,8 +1,29 @@
+#
+#   Example 5: Finding maximum arrival rate for given system and
+#   performance requirements
+#
+#   Consider a data processing system with N_C = 10 Cloud servers. 
+#   Mean data processing time T_C = 100 s. 
+#   What is maximum arrival rate of data processing requests 
+#   per hour lambda_cr if critical mean waiting time W_cr = 300 s? 
+#   Estimate how the lambda_cr depends on the distribution 
+#   of processing time, when: 
+#      a) processing time is constant - standard deviation std(T_C)=0 s, 
+#      b) standard deviation of processing time std(T_C)=50 s, 
+#      c) processing time is exponentially distributed 
+# 	   - standard deviation std(T_C)=mean(T_C)=100 s.
+#   To solve this task the multi-server msqs model can be used 
+#   from the core functions library.
+#	
+#	Waiting time results are compared to the results obtained by 
+# 	the MATLAB SimEvents model 
+#   
+#   Author: Paulius Tervydis
+#   Date: 2023-10-19
+# 
+# ==============================================================
+
 import matplotlib.pylab as plt
-import sys, os
-current = os.path.dirname(os.path.realpath(__file__))
-parent = os.path.dirname(current)
-sys.path.append(parent)
 from qsystems import msqs
 import pandas as pd 
 import time
@@ -45,42 +66,32 @@ print(" - lambda_cr = %d req./h, if std(T_C) = 100 s"%lambda_cr_mm1)
 # >>>  - lambda_cr = 240 req./h, if std(T_C) = 100 s
 
 # import data to compare with event-driven Matlab model results
-df_matlab = pd.read_csv('event_driven_model_results_simtime1000h.csv')
-# df_matlab2 = pd.read_csv('event_driven_model_results_simtime240h.csv')
-# df_matlab3 = pd.read_csv('event_driven_model_results_simtime2400h.csv')
+df_matlab = pd.read_csv('./matlab_SimEvents_model/event_driven_model_results_simtime1000h.csv')
 
 # print(df_matlab.to_string()) 
 
 plt.figure()
 
-plt.plot(df_md1['ar'],df_md1['w']*3600,'g')
-plt.plot(df_mg1['ar'],df_mg1['w']*3600,'b')
-plt.plot(df_mm1['ar'],df_mm1['w']*3600,'r')
-plt.plot(df_matlab['Lambda'],df_matlab['W_C_md1'],'gx')
-plt.plot(df_matlab['Lambda'],df_matlab['W_C_mg1'],'bx')
-plt.plot(df_matlab['Lambda'],df_matlab['W_C_mm1'],'rx')
-# plt.plot(df_matlab2['Lambda'],df_matlab2['W_C_md1'],'g*')
-# plt.plot(df_matlab2['Lambda'],df_matlab2['W_C_mg1'],'b*')
-# plt.plot(df_matlab2['Lambda'],df_matlab2['W_C_mm1'],'r*')
-# plt.plot(df_matlab3['Lambda'],df_matlab3['W_C_md1'],'gx')
-# plt.plot(df_matlab3['Lambda'],df_matlab3['W_C_mg1'],'bx')
-# plt.plot(df_matlab3['Lambda'],df_matlab3['W_C_mm1'],'rx')
-# plt.plot([0,350],[W_cr_sec,W_cr_sec],'k:',linestyle=':', label ="$W_{Ccr} = 300$ s")
+plt.plot(df_md1['ar'],df_md1['w']*3600,'g',label = "qsystems MD1")
+plt.plot(df_mg1['ar'],df_mg1['w']*3600,'b',label = "qsystems MG1")
+plt.plot(df_mm1['ar'],df_mm1['w']*3600,'r',label = "qsystems MM1")
+plt.plot(df_matlab['Lambda'],df_matlab['W_C_md1'],'gx',label = "SimEvents MD1")
+plt.plot(df_matlab['Lambda'],df_matlab['W_C_mg1'],'bx',label = "SimEvents MG1")
+plt.plot(df_matlab['Lambda'],df_matlab['W_C_mm1'],'rx',label = "SimEvents MM1")
+
 plt.axhline(W_cr_s,color='black',linestyle=':')
 
 plt.stem(lambda_cr_md1,W_cr_s,'g:',label="$\lambda_{cr}=%d$, mean($T_C$) = 100 s, std($T_C$)= 0 s"%lambda_cr_md1) 
 plt.stem(lambda_cr_mg1,W_cr_s,'b:',label="$\lambda_{cr}=%d$, mean($T_C$) = 100 s, std($T_C$)= 50 s"%lambda_cr_mg1)
 plt.stem([lambda_cr_mm1],[W_cr_s],'r:',label="$\lambda_{cr}=%d$, mean($T_C$) = 100 s, std($T_C$)= 100 s"%lambda_cr_mm1)
 plt.text(0,W_cr_s+10,"$W_{Ccr} = %d$ s"%W_cr_s)
-# # print(ddf)
-# # print(W_C_array)
-# # plt.plot(lambda_C_list,np.array(W_C_mm1_list)*3600)
-# # plt.plot(lambda_C_list,np.array(W_C_md1_list)*3600)
+
 plt.xlim([140,320])
 plt.ylim([0,800])
 plt.grid()
 plt.xlabel("Arrival rate $\lambda$ [req./h]")
 plt.ylabel("Waiting time $W_C$ [s]")
-plt.legend(handlelength=0)
+# plt.legend(handlelength=0)
+plt.legend()
 #plt.savefig("Fig_Example1.pdf")
 plt.show()
