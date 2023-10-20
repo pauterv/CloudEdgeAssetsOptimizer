@@ -8,7 +8,6 @@ from calculation import *
 from graph import *
 from optimizer import *
 import pandas as pd
-# from calculation
 
 info_text = """
 CloudEdgeAssetsOptimizer can find the optimal numbers of Edge devices N_E and Cloud servers N_C required for data processing. This estimation is based on factors such as arrival rate lambda of data processing requests, load balancing or distribution between Edge an Cloud (estimated by P_E and P_C=1-P_E) probabilities), processing capabilities (mean time of data processing in Edge devices T_E and Cloud servers T_C), and user demand for the waiting time W_E and W_C. By analyzing these parameters, the software can determine the optimum number of devices needed to handle the workload efficiently, without causing excessive waiting times or delays. 
@@ -87,7 +86,7 @@ def graph_button_click():
     plotgraph(graph_parameters)
 
 
-# Create the main application window
+# Creates the main application window
 root = tk.Tk()
 root.title("CloudEdgeAssetOptimizer")
 
@@ -172,7 +171,7 @@ B_p_value = ttk.Spinbox(edge_params_frame,
                         from_=0, to=10000, increment=1, width=10)
 B_p_value.grid(column=1, row=4, padx=5, pady=2)
 
-C_E_var = tk.StringVar(value="0.1")  # Battery-Related Performance Index
+C_E_var = tk.StringVar(value="0.1")  
 ttk.Label(edge_params_frame,
           text=u"Cost of Edge device (C_E) [Eur/h]", width=28
           ).grid(column=0, row=5, sticky="w", padx=5)
@@ -212,7 +211,7 @@ T_C_distr_combo = ttk.Combobox(cloud_params_frame,
                                ).grid(column=1, row=3)
 T_C_distr_value.set("Determined")
 
-C_C_var = tk.StringVar(value="0.10")  # Battery-Related Performance Index
+C_C_var = tk.StringVar(value="0.10")  
 ttk.Label(cloud_params_frame,
           text=u"Cost of Cloud VM server (C_C) [Eur/h]", width=28
           ).grid(column=0, row=4, sticky="w", padx=5)

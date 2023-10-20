@@ -56,36 +56,25 @@ def cost_function(PE, NE, NC):
     rho_C = lambda_C/mu_C
     PC = 1 - PE
     if C_C_pricing == "Dedicated":
-        # C_S = N_E*C_E + N_C*C_C
         C_S_C = NC*C_C
     if C_C_pricing == "On-demand":
-        # C_S = N_E*C_E + N_C*C_C*rho_C
         C_S_C = NC*C_C*rho_C
     C_S_E = NE*C_E
-    # R_S = (Lambda_E + Lambda_C)*r_p
-    # P_S = R_S - C_S
- 
     R_S_E = Lambda_E*r_p
     R_S_C = Lambda_C*r_p
-
     P_S_E = R_S_E - C_S_E
     P_S_C = R_S_C - C_S_C
-
-    # return 1e6-(P_S_E+P_S_C)  
-    return C_S_E+C_S_C  # Example cost function
+    return C_S_E+C_S_C 
 
 def edge_battery_function(PE, NE):
     Lambda_E = PE * Lambda
     N_E_bat_cr = np.ceil((Lambda_E*T_bat_cr)/B_p)
     if NE < N_E_bat_cr:
-        # return 1e6#np.inf
         return np.inf
     else:
         return 0
 
 def waiting_time_function(PE, NE, NC):
-    # W_E = 1e6#np.inf 
-    # W_C = 1e6#np.inf 
     W_E = np.inf 
     W_C = np.inf 
     PC = 1 - PE
@@ -97,14 +86,11 @@ def waiting_time_function(PE, NE, NC):
         C_params = msqs(ar = Lambda*PC, sn = NC, s1 = T_C, qs=qs_C)
         if C_params['w'] <= W_cr:
             W_C = C_params['w'] 
-
     return W_E + W_C
-    # else:
-        # return 1e6
+
 
 # Define the combined objective function
 def combined_objective(x):
-    
     PE = x[0]
     NE, NC = np.round(x[1:]).astype(int) 
     return cost_function(PE, NE, NC)+ waiting_time_function(PE, NE, NC)+ edge_battery_function(PE, NE)+(NE+NC)
@@ -158,11 +144,13 @@ tstart = time.time()
 optimized_parameters = find_optimal_configuration(parameters)
 tfinish= time.time()
 t_optimizer = tfinish-tstart
+
 print(60*"-")
 print("Results of optimizer.py model:")
 print("Execution time = ",t_optimizer,"seconds")
 # print(optimized_parameters)
 print(f"Optimal NE: {int(optimized_parameters['N_E_opt'])}")
 print(f"Optimal NC: {int(optimized_parameters['N_C_opt'])}")
+
 print(60*"=")
 print("optimizer.py is %.2f times faster"%(t_scipy_optimize/t_optimizer))      

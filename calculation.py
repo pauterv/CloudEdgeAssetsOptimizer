@@ -78,10 +78,7 @@ def calc_system_performance(parameters):
 
     if rho_E > 0:
         T_E_bat = B_p*T_E/rho_E
-        # print("T_E_bat",T_E_bat)
         if T_E_bat < T_bat_cr:
-            # N_E_bat_cr = ceil(T_bat_cr*lambda_E*B_p/(T_bat_cr*mu_E))
-            # P_E_cr = (N_E*T_bat_cr*mu_E/(Lambda*B_p*T_E))
             N_E_bat_cr = np.ceil((lambda_E*T_bat_cr)/B_p) 
             return f"Warning: Working time of battery powered devices T_E_bat = {T_E_bat} h < T_bat_cr!\n\n"\
                     f"Possible solutions to ensure T_E_bat > T_bat_cr:\n"\
