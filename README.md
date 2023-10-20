@@ -16,7 +16,7 @@ performance.
 
 CloudEdgeAssetsOptimizer functions utilize queueing theory principles, 
 therefore it also enables users to explore and fine-tune system parameters 
-across diverse domains,including telecommunication networks, transportation
+across diverse domains, including telecommunication networks, transportation
 and manufacturing systems.
 
 Author: Paulius Tervydis
