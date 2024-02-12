@@ -113,7 +113,7 @@ arrival_rate_value.grid(column=1, row=1, padx=5, pady=2)
 
 r_p_var = tk.StringVar(value="0.05")
 ttk.Label(arrival_params_frame,
-          text=u"Retinue per processed req. (r_p) [Eur]", width=28
+          text=u"Revenue per processed req. (r_p) [Eur]", width=28
           ).grid(column=0, row=2, sticky="w", padx=5)
 r_p_value = ttk.Spinbox(arrival_params_frame,
                         textvariable=r_p_var, format="%.8f",
