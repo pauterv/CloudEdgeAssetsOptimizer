@@ -102,8 +102,11 @@ def calc_system_performance(parameters):
     E_params = msqs(ar = Lambda*P_E, sn = N_E, s1 = T_E, qs=qs_E)    
     C_params = msqs(ar = Lambda*P_C, sn = N_C, s1 = T_C, qs=qs_C)    
         
-    lambda_Ecr = msqs_ar_cr(sn=N_E-1,sr=mu_E,w=W_cr,qs=qs_E)
-    lambda_Ccr = msqs_ar_cr(sn=N_C-1,sr=mu_C,w=W_cr,qs=qs_C)
+    # lambda_Ecr = msqs_ar_cr(sn=N_E-1,sr=mu_E,w=W_cr,qs=qs_E)
+    # lambda_Ccr = msqs_ar_cr(sn=N_C-1,sr=mu_C,w=W_cr,qs=qs_C)
+
+    lambda_Ecr = msqs_ar_cr(sn=N_E,sr=mu_E,w=W_cr,qs=qs_E)
+    lambda_Ccr = msqs_ar_cr(sn=N_C,sr=mu_C,w=W_cr,qs=qs_C)
     
 
     if Lambda_E > 0:
