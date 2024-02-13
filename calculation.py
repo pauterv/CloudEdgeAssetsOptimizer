@@ -79,14 +79,13 @@ def calc_system_performance(parameters):
     if rho_E > 0:
         T_E_bat = B_p*T_E/rho_E
         if T_E_bat < T_bat_cr:
-            N_E_bat_cr = np.ceil((lambda_E*T_bat_cr)/B_p) 
+            N_E_bat_cr = np.ceil((Lambda_E*T_bat_cr)/B_p) 
             return f"Warning: Working time of battery powered devices T_E_bat = {T_E_bat} h < T_bat_cr!\n\n"\
                     f"Possible solutions to ensure T_E_bat > T_bat_cr:\n"\
                     "   for given Lambda, P_E, T_bat_cr:\n"\
                     "   1) increase number of Edge devices N_E:\n"\
                     f"      minimum N_E = {N_E_bat_cr}\n"\
                     "   2) increase B_p of Edge devices\n"\
-                    # f"      maximum P_E = {P_E_cr}"
                     
     if mu_C < lambda_C:
         T_C_cr = T_C/(lambda_C/mu_C)
