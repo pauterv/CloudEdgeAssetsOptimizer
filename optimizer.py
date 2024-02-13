@@ -33,7 +33,8 @@ def find_optimal_configuration(parameters):
     P_C = 1 - P_E
 
     def model(N_E, N_C):
-        lambda_Ecr = msqs_ar_cr(sn=N_E-1,sr=mu_E,w=W_cr,qs=qs_E)
+        # lambda_Ecr = msqs_ar_cr(sn=N_E-1,sr=mu_E,w=W_cr,qs=qs_E)
+        lambda_Ecr = msqs_ar_cr(sn=N_E,sr=mu_E,w=W_cr,qs=qs_E)
         lambda_Ccr = msqs_ar_cr(sn=N_C,sr=mu_C,w=W_cr,qs=qs_C)
         if Lambda_E > 0:
             P_Ea=np.where(Lambda_E > lambda_Ecr,1-((Lambda_E-lambda_Ecr)/Lambda_E),1)
